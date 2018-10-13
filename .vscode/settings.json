@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "/usr/local/bin/python3",
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "C_Cpp.errorSquiggles": "Disabled"
+}
