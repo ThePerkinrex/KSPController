@@ -72,7 +72,7 @@ void loop() {
 }
 
 void handleCommand(int commandN, int argc, String argv[]){
-  Serial.print(commandN);
+  /*Serial.print(commandN);
   Serial.print(";");
   Serial.print(argc);
   Serial.print(";[");
@@ -82,7 +82,7 @@ void handleCommand(int commandN, int argc, String argv[]){
       Serial.print(",");
     }
   }
-  Serial.println("]");
+  Serial.println("]");*/
   if(commandN==startingUp){
     digitalWrite(CONNECTED_LED_PIN, HIGH);
   }
@@ -103,7 +103,9 @@ void handleCommand(int commandN, int argc, String argv[]){
   }
 }
 
-void sendData(){}
+void sendData(){
+  
+}
 
 void levelShiftOut(byte lf, byte ox, byte sf, byte mp, byte ec){
   short levels[5];

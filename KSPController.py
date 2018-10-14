@@ -6,7 +6,7 @@ from logger import *
 import time
 import sys
 
-l.set_minimum_level(INFO)
+l.set_minimum_level(DEBUG)
 TIMEOUT = 10
 
 exit_serial_port_find = False
@@ -34,7 +34,7 @@ while not exit_serial_port_find:
 info('Serial port connected')
 ser = serial.Serial('/dev/cu.usbmodem14201', 9600, timeout=1)
 info('Serial connection established')
-#conn = krpc.connect('Perc Controller')
+conn = krpc.connect('Perc Controller', rpc_port=25565, stream_port=25566)
 info('Connection established with KSP')
 
 def read_line():
@@ -60,7 +60,7 @@ def close_connection():
     
     write_line('4')
     ser.close()
-    #conn.close()
+    conn.close()
 
 while True:
     if read_line() == '4':
@@ -68,16 +68,20 @@ while True:
         write_line('3')
         break
 
-idx = 0
+#idx = 0
 while True:
     #debug('Looping')
     try:
-        write_line('1:Hello;'+str(idx))
-        line = read_line()
-        if line != '':
-            debug(line)
-        idx += 1
-        time.sleep(0.5)
+        #write_line('1:Hello;'+str(idx))
+        if conn.krpc.current_game_scene == conn.krpc.GameScene.flight:
+            vessel = conn.space_center.active_vessel
+            resources = vessel.resources
+            debug('SolidFuel:', resources.amount('SolidFuel'))
+            line = read_line()
+            if line != '':
+                debug(line)
+        #idx += 1
+        #time.sleep(0.5)
     except Exception as e:
         err("Error:", e)
         break
