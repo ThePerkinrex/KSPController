@@ -10,6 +10,8 @@ from CONSTANTS import *
 l.set_minimum_level(DEBUG)
 TIMEOUT = 10
 
+import commandHandler
+
 def invert_trunc(n):
     if n>int(n):
         return int(n)+1
@@ -101,7 +103,7 @@ def send_data():
     vessel = conn.space_center.active_vessel
     if not connected:
         #write_line('3:'+str(int(vessel.control.rcs))+';'str(int(vessel.control.sas)))
-        write_command(CONNECTION_START_OUT, int(vessel.control.rcs), int(vessel.control.sas))
+        write_command(CONNECTION_START_OUT)
         connected = True
     resources = vessel.resources
     lf = '0'
@@ -146,6 +148,10 @@ def send_data():
                 reference_frame = vessel.orbital_reference_frame
                 speedname = 'ORBIT'
             write_command(LCD_TXT_OUT, speedname + ' SPEED', vessel.flight(reference_frame).surface_altitude)
+
+def handle_command(command):
+    vessel = conn.space_center.active_vessel
+    commandHandler.handle_command(conn, vessel, command)
 
 
 while True:
