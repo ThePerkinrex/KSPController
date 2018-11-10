@@ -1,3 +1,6 @@
+
+//---------------------------------
+// COMMS IDS
 // OUT
 #define digital 0 //0:<word(2 bytes)>
 #define analog 1  //1:1023;10;0;219
@@ -11,7 +14,7 @@
 #define manouver 2
 #define startingUp 3
 #define connectionEnded 4
-
+//-----------------------------------
 // PINS
 // DIGITAL
 // I/O CUSTOM
@@ -52,6 +55,8 @@
 #define Y_JOY_PIN A2
 #define Z_JOY_PIN A3
 #define P_JOY_PIN A4
+// CONSTANTS
+#define ANALOG_VALS_LEN 5
 
 #include <BitbloqLiquidCrystal.h>
 
@@ -152,6 +157,8 @@ void handleCommand(int commandN, int argc, String argv[]){
     lcd.p(argv[1].c_str());
   }else if(commandN==fuelLevels&&argc==5){
     levelShiftOut(byte(argv[0].toInt()),byte(argv[1].toInt()),byte(argv[2].toInt()),byte(argv[3].toInt()),byte(argv[4].toInt()));
+  }else if(commandN==manouver&&argc==1){
+    digitalWrite(MANOUVER_LED_PIN, argv[0]);
   }
 }
 
@@ -209,9 +216,9 @@ void sendData(){
   if(lastAnalogValues != analogValues){
     Serial.print(analog);
     Serial.print(':');
-    for(int i = 0; i<5; i++){
+    for(int i = 0; i<ANALOG_VALS_LEN; i++){
       Serial.print(analogValues[i]);
-      if(i<4){
+      if(i!=ANALOG_VALS_LEN-1){
         Serial.print(';');
       }
     }

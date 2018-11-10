@@ -99,6 +99,7 @@ lcd_max = 1
 # 1: Speed
 lcd_mode_change = False
 connected=False
+manouver_change=False
 def send_data():
     vessel = conn.space_center.active_vessel
     if not connected:
@@ -148,21 +149,29 @@ def send_data():
                 reference_frame = vessel.orbital_reference_frame
                 speedname = 'ORBIT'
             write_command(LCD_TXT_OUT, speedname + ' SPEED', vessel.flight(reference_frame).surface_altitude)
+    # TODO: Add manouver handling to send it
+    if manouver_change:
+        write_command(MANOUVER_OUT, 0)
 
 def handle_command(command):
     vessel = conn.space_center.active_vessel
-    commandHandler.handle_command(conn, vessel, command)
+    data_in = {
+        'lcd_mode': lcd_mode,
+        'lcd_max': lcd_max
+    }
+    out = commandHandler.handle_command(conn, vessel, command, data_in)
+    lcd_mode = out['lcd_mode']
+    lcd_mode_change = out['lcd_mode_change']
 
 
 while True:
     try:
         if conn.krpc.current_game_scene == conn.krpc.GameScene.flight:
-            
             send_data()
             line = read_line()
             if line != '':
-                debug(line)
-                if line == MODE_UP_IN:
+                handle_command(line)
+                """ if line == MODE_UP_IN:
                     lcd_mode_change = True
                     lcd_mode += 1
                     if lcd_mode > lcd_max:
@@ -171,7 +180,7 @@ while True:
                     lcd_mode_change = True
                     lcd_mode -= 1
                     if lcd_mode < 0:
-                        lcd_mode = lcd_max
+                        lcd_mode = lcd_max """
         else:
             if connected:
                 write_command(CONNECTION_END_OUT)
