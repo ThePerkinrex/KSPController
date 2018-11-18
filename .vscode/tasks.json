@@ -6,7 +6,8 @@
         {
             "label": "Test Python",
             "type": "shell",
-            "command": "perctest"
+            "command": "perctest",
+            "problemMatcher": []
         }
     ]
 }

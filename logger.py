@@ -9,7 +9,6 @@ colorama.init()
 levelcolors = [Fore.GREEN, Fore.CYAN, Fore.YELLOW+Style.BRIGHT, Fore.RED+Style.BRIGHT]
 levels = ['DEBUG', 'INFO', 'WARNING', 'ERROR']
 
-
 class Logger:
     minimumLevel=1
     def set_minimum_level(self, level):
@@ -24,6 +23,10 @@ class Logger:
             print(msg_to_print)
 
 l = Logger()
+
+
+def set_minimum_level(level):
+    l.set_minimum_level(level)
 
 def debug(*args):
     msg = ''

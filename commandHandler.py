@@ -35,6 +35,7 @@ def decode_digital(digital):
 def handle_command(conn, vessel, command, data):
     lcd_mode = data['lcd_mode']
     lcd_max = data['lcd_max']
+    arduino_ready = data['arduino_ready']
 
     debug('DATA_IN:', data)
     debug('Handling command:', command)
@@ -56,9 +57,11 @@ def handle_command(conn, vessel, command, data):
     elif instruction == DIGITAL_IN:
         digital_data = decode_digital(int(args[0]))
         debug('DIGITAL_DATA:', digital_data)
-
+    elif instruction == ARDUINO_STARTUP:
+        arduino_ready = True
     
     return {
         'lcd_mode': lcd_mode,
         'lcd_mode_change': lcd_mode != data['lcd_mode'],
+        'arduino_ready': arduino_ready,
     }
